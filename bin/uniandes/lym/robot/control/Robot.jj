@@ -31,6 +31,7 @@ import java.awt.Point;
 import java.io.*;
 import java.util.Vector;
 import java.util.LinkedList;
+import java.util.HashMap;
 
 @SuppressWarnings("serial")
 public class Robot 
@@ -38,6 +39,7 @@ public class Robot
 
 
 	private RobotWorldDec world;
+	private HashMap<String,Integer> variables = new HashMap<String,Integer>();
 	
 	
 	void setWorld(RobotWorld w) {
@@ -82,6 +84,8 @@ TOKEN :
 {
 		<NUM: (<DIGIT>)+ >
 		|  	<#DIGIT: ["0"-"9"] >
+		| <NAME: (<LETTER>)+>
+		| <#LETTER: ["a"-"z"]|["A"-"Z"] >
         
 }
 
@@ -149,6 +153,36 @@ TOKEN :
 	 * @return the corresponding value of the string
 	 * @error  corresponding value is too large
 	 */
+    int varORnum() throws Error:
+    {
+		int total;
+		String variable;
+	}
+	{
+		(<NAME>
+		{
+		  variable= token.image;
+		  if (variables.get(variable) != null)
+		  {
+           total = variables.get(variable);
+		   }else
+		  {
+           throw new Error ("La variable no existe.");
+		   }
+		  return total;
+		}
+        | <NUM>{
+			try 
+			{
+				total = Integer.parseInt(token.image);
+			} 
+			catch (NumberFormatException ee) 
+			{
+				throw new Error("Number out of bounds: "+token.image+" !!");
+			}
+			return total;
+		}		)
+	}
 
 	int num() throws Error:
 	{	
