@@ -62,10 +62,21 @@ TOKEN: /* Nombres de Comandos */
 {
 
 			<MOV:  "Mov">
-		| 	<RIGHT: "RIGHT">
-		|  < POP: "Pop" >
-		|  <GO: "GO" >
-        |  < HOP:  "HOP" >
+			
+		| <RIGHT: "RIGHT">
+		| <LEFT: "LEFT">
+		| <AROUND: "AROUND">
+		| <FRONT: "FRONT">
+		| <BACK: "BACK">
+
+        | <NORTH: "NORTH">
+        | <SOUTH: "SOUTH">
+        | <EAST: "EAST">
+        | <WEST: "WEST"> 
+		
+		| <POP: "Pop" >
+		| <GO: "GO" >
+        | <HOP:  "HOP" >
         | <AsignTo: "asignTo">
 		| <GoTO: "goto">
 		| <MOVE: "move">
@@ -82,6 +93,28 @@ TOKEN: /* Nombres de Comandos */
 
 }
 
+TOKEN: /* Nombres de Control */
+{
+			<WHILE:  "while">
+	    | <DO: "do">
+	    | <IF: "if">
+	    | <THEN: "then">
+	    | <ELSE: "else">
+	    | <REPEAT: "repeat">
+}
+
+TOKEN: /* Nombres de Condicion */
+{
+			<FACING: "facing" >
+        | <canPut: "canPut">
+        | <canPick: "canPick">
+        | <canMoveInDir: "canMoveInDir">
+        | <canJumpInDir: "canJumpInDir">
+        | <canMoveToThe: "canMoveToThe">
+        | <canJumpToThe: "canJumpToThe">
+        | <NOT: "not">
+}
+
 TOKEN:
 {
 		<BALLOONS:  "BALLOONS" >
@@ -89,6 +122,7 @@ TOKEN:
 		| <ROBOT: "ROBOT_R" >
 		| <VARS: "VARS">
 		| <PROCS: "PROCS" >
+		
 
 }
 
