@@ -15,27 +15,53 @@ public interface RobotConstants {
   /** RegularExpression Id. */
   int RIGHT = 6;
   /** RegularExpression Id. */
-  int PUT = 7;
+  int POP = 7;
   /** RegularExpression Id. */
-  int PICK = 8;
+  int GO = 8;
   /** RegularExpression Id. */
-  int POP = 9;
+  int HOP = 9;
   /** RegularExpression Id. */
-  int GO = 10;
+  int AsignTo = 10;
   /** RegularExpression Id. */
-  int HOP = 11;
+  int GoTO = 11;
   /** RegularExpression Id. */
-  int BALLOONS = 12;
+  int MOVE = 12;
   /** RegularExpression Id. */
-  int CHIPS = 13;
+  int TURN = 13;
   /** RegularExpression Id. */
-  int NUM = 14;
+  int FACE = 14;
   /** RegularExpression Id. */
-  int DIGIT = 15;
+  int PUT = 15;
   /** RegularExpression Id. */
-  int NAME = 16;
+  int PICK = 16;
   /** RegularExpression Id. */
-  int LETTER = 17;
+  int MoveToThe = 17;
+  /** RegularExpression Id. */
+  int MoveInDir = 18;
+  /** RegularExpression Id. */
+  int JumpToThe = 19;
+  /** RegularExpression Id. */
+  int JumpInDir = 20;
+  /** RegularExpression Id. */
+  int NOP = 21;
+  /** RegularExpression Id. */
+  int BALLOONS = 22;
+  /** RegularExpression Id. */
+  int CHIPS = 23;
+  /** RegularExpression Id. */
+  int ROBOT = 24;
+  /** RegularExpression Id. */
+  int VARS = 25;
+  /** RegularExpression Id. */
+  int PROCS = 26;
+  /** RegularExpression Id. */
+  int NUM = 27;
+  /** RegularExpression Id. */
+  int DIGIT = 28;
+  /** RegularExpression Id. */
+  int NAME = 29;
+  /** RegularExpression Id. */
+  int LETTER = 30;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -49,13 +75,26 @@ public interface RobotConstants {
     "\"\\n\"",
     "\"Mov\"",
     "\"RIGHT\"",
-    "\"Put\"",
-    "\"Pick\"",
     "\"Pop\"",
     "\"GO\"",
     "\"HOP\"",
+    "\"asignTo\"",
+    "\"goto\"",
+    "\"move\"",
+    "\"turn\"",
+    "\"face\"",
+    "\"Put\"",
+    "\"Pick\"",
+    "\"moveToThe\"",
+    "\"moveInDir\"",
+    "\"jumpToThe\"",
+    "\"jumpInDir\"",
+    "\"nop\"",
     "\"BALLOONS\"",
     "\"CHIPS\"",
+    "\"ROBOT_R\"",
+    "\"VARS\"",
+    "\"PROCS\"",
     "<NUM>",
     "<DIGIT>",
     "<NAME>",

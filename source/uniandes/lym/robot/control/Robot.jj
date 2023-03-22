@@ -63,18 +63,32 @@ TOKEN: /* Nombres de Comandos */
 
 			<MOV:  "Mov">
 		| 	<RIGHT: "RIGHT">
-		| 	<PUT: "Put">
-		| 	<PICK: "Pick">
 		|  < POP: "Pop" >
 		|  <GO: "GO" >
-        |  < HOP:  "HOP" >		
+        |  < HOP:  "HOP" >
+        | <AsignTo: "asignTo">
+		| <GoTO: "goto">
+		| <MOVE: "move">
+		| <TURN: "turn">
+		| <FACE: "face">
+		| <PUT: "Put">
+		| <PICK: "Pick">
+		| <MoveToThe: "moveToThe">
+		| <MoveInDir: "moveInDir">
+		| <JumpToThe: "jumpToThe">
+		| <JumpInDir: "jumpInDir">
+		| <NOP: "nop">
+        		
 
 }
 
 TOKEN:
 {
 		<BALLOONS:  "BALLOONS" >
-		|	<CHIPS:     "CHIPS"  >	
+		| <CHIPS:     "CHIPS"  >
+		| <ROBOT: "ROBOT_R" >
+		| <VARS: "VARS">
+		| <PROCS: "PROCS" >
 
 }
 
