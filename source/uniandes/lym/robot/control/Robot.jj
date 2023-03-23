@@ -251,4 +251,76 @@ TOKEN :
 		}
 	}
 
-	
+
+
+// HEART OF THE PROYECT
+
+void program():
+{
+
+}
+{
+  <ROBOT> variables() listaProcs() "[" (instruct())+"]"
+}
+
+void variables():
+{
+    String variable;
+}
+{
+  <VARS> (<NAME>
+		{
+		  variable= token.image;
+		  variables.put(variable,null);
+		}
+		(",")?)+
+}
+
+void listaProcs():
+{
+
+}
+{
+  <PROCS> (procedure())+
+}
+
+void procedure():
+{
+
+}
+{
+ <NAME>
+ {
+   // uhh codigo para recordar procedimientos
+ }
+ "[" parametros() instrucciones()"]"
+}
+
+void parametros():
+{
+
+}
+{
+ "|" (<NAME>
+     {
+      // uhh codigo para recordar variables locales
+     }
+     (",")?
+     )* "|"
+}
+
+void instrucciones():
+{
+
+}
+{
+ (instruct()(",")?)+
+}
+
+void instruct():
+{
+// command | control  | procedureDefined
+}
+{
+ command()
+}
