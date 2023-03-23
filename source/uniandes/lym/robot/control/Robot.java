@@ -27,72 +27,316 @@ public class Robot implements RobotConstants {
         //boolean command(uniandes.lym.robot.view.Console sistema) :
   final public boolean command(Console sistema) throws ParseException {
                 int x,y;
-                salida=new String();
+                String salida=new String();
+                String entrada= new String();
+                Boolean face = true;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case MOV:
     case RIGHT:
+    case LEFT:
+    case AROUND:
+    case FRONT:
     case POP:
     case GO:
     case HOP:
+    case AssignTo:
+    case TURN:
+    case FACE:
     case PUT:
     case PICK:
+    case MoveToThe:
+    case MoveInDir:
+    case JumpToThe:
+    case JumpInDir:
+    case NOP:
       label_1:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case RIGHT:
           jj_consume_token(RIGHT);
-          jj_consume_token(53);
-          jj_consume_token(54);
-                                    world.turnRight();salida = "Command: Turnright";
+                             world.turnRight();salida = "Command: Turnright";
+          break;
+        case LEFT:
+          jj_consume_token(LEFT);
+          jj_consume_token(RIGHT);
+          jj_consume_token(RIGHT);
+          jj_consume_token(RIGHT);
+                                                 salida = "Command: Turnleft";
+          break;
+        case AROUND:
+          jj_consume_token(AROUND);
+          jj_consume_token(RIGHT);
+          jj_consume_token(RIGHT);
+                                    salida = "Command: Turnaround";
+          break;
+        case FRONT:
+          jj_consume_token(FRONT);
+                     salida = "Command: Front";
+          break;
+        case AssignTo:
+          jj_consume_token(AssignTo);
+          x = varORnum();
+          jj_consume_token(52);
+          jj_consume_token(NAME);
+                                                entrada= token.image;
+                  variables.put(entrada,x);
+                                              salida = "Command: AssignTo";
+          break;
+        case TURN:
+          jj_consume_token(TURN);
+          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+          case RIGHT:
+            jj_consume_token(RIGHT);
+            break;
+          case LEFT:
+            jj_consume_token(LEFT);
+            break;
+          case AROUND:
+            jj_consume_token(AROUND);
+            break;
+          default:
+            jj_la1[0] = jj_gen;
+            jj_consume_token(-1);
+            throw new ParseException();
+          }
+                 entrada= token.image; if (entrada.equals("left")) {
+                                        world.turnRight();
+                                        world.turnRight();
+                                        world.turnRight();
+                                        }else if ( entrada.equals("right" ))
+                                        {  world.turnRight(); }
+                                        else if (entrada.equals("around")) {
+                                          world.turnRight();
+                                          world.turnRight(); } salida = "Command: Turn";
+          break;
+        case FACE:
+          jj_consume_token(FACE);
+          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+          case NORTH:
+            jj_consume_token(NORTH);
+            break;
+          case SOUTH:
+            jj_consume_token(SOUTH);
+            break;
+          case EAST:
+            jj_consume_token(EAST);
+            break;
+          case WEST:
+            jj_consume_token(WEST);
+            break;
+          default:
+            jj_la1[1] = jj_gen;
+            jj_consume_token(-1);
+            throw new ParseException();
+          }
+                    entrada= token.image; x=-1;
+            if (entrada.equals("north")) {
+              x = 0;
+              }else if (entrada.equals("south")){
+            x = 1;
+              }else if (entrada.equals("east")) {
+            x = 2;
+              }else if (entrada.equals("west")) {
+            x = 3;
+              }
+
+            while(face) {
+        if (world.getFacing() != x) {
+        world.turnRight();
+        }else {
+        face = false;
+        } }
+          break;
+        case MoveToThe:
+          jj_consume_token(MoveToThe);
+          x = varORnum();
+          jj_consume_token(52);
+          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+          case RIGHT:
+            jj_consume_token(RIGHT);
+            break;
+          case LEFT:
+            jj_consume_token(LEFT);
+            break;
+          case AROUND:
+            jj_consume_token(AROUND);
+            break;
+          default:
+            jj_la1[2] = jj_gen;
+            jj_consume_token(-1);
+            throw new ParseException();
+          }
+                  entrada= token.image;
+        if (entrada.equals("left")) {
+            world.turnRight();
+            world.turnRight();
+            world.turnRight();
+            world.moveForward(x,false);
+            world.turnRight();
+
+            }else if ( entrada.equals("right" ))
+            {  world.turnRight();
+            world.moveForward(x,false);
+            world.turnRight();
+            world.turnRight();
+            world.turnRight(); }
+            else if (entrada.equals("around")) {
+            world.turnRight();
+            world.turnRight();
+            world.moveForward(x,false);
+            world.turnRight();
+            world.turnRight();
+             }
+            salida = "Command: MoveToThe";
+          break;
+        case MoveInDir:
+          jj_consume_token(MoveInDir);
+          y = varORnum();
+          jj_consume_token(52);
+          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+          case NORTH:
+            jj_consume_token(NORTH);
+            break;
+          case SOUTH:
+            jj_consume_token(SOUTH);
+            break;
+          case EAST:
+            jj_consume_token(EAST);
+            break;
+          case WEST:
+            jj_consume_token(WEST);
+            break;
+          default:
+            jj_la1[3] = jj_gen;
+            jj_consume_token(-1);
+            throw new ParseException();
+          }
+         entrada= token.image; x=0;
+            if (entrada.equals("north")) {
+              x = 0;
+              }else if (entrada.equals("south")){
+            x = 1;
+              }else if (entrada.equals("east")) {
+            x = 2;
+              }else{
+            x = 3;
+              }
+
+            while(face) {
+        if (world.getFacing() != x) {
+        world.turnRight();
+        }else {
+        face = false; world.moveForward(y, false);
+        }salida = "Command: JumpInDir"; }
+          break;
+        case JumpToThe:
+          jj_consume_token(JumpToThe);
+          x = varORnum();
+          jj_consume_token(52);
+          jj_consume_token(NAME);
+                                               entrada= token.image;
+        if (entrada.equals("left")) {
+            world.turnRight();
+            world.turnRight();
+            world.turnRight();
+            world.moveForward(x,true);
+            world.turnRight();
+
+            }else if ( entrada.equals("right" ))
+            {  world.turnRight();
+            world.moveForward(x,true);
+            world.turnRight();
+            world.turnRight();
+            world.turnRight(); }
+            else if (entrada.equals("around")) {
+            world.turnRight();
+            world.turnRight();
+            world.moveForward(x,true);
+            world.turnRight();
+            world.turnRight();
+             }
+            salida = "Command: JumpToThe";
+          break;
+        case JumpInDir:
+          jj_consume_token(JumpInDir);
+          y = varORnum();
+          jj_consume_token(52);
+          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+          case NORTH:
+            jj_consume_token(NORTH);
+            break;
+          case SOUTH:
+            jj_consume_token(SOUTH);
+            break;
+          case EAST:
+            jj_consume_token(EAST);
+            break;
+          case WEST:
+            jj_consume_token(WEST);
+            break;
+          default:
+            jj_la1[4] = jj_gen;
+            jj_consume_token(-1);
+            throw new ParseException();
+          }
+         entrada= token.image; x=-1;
+            if (entrada.equals("north")) {
+              x = 0;
+              }else if (entrada.equals("south")){
+            x = 1;
+              }else if (entrada.equals("east")) {
+            x = 2;
+              }else if (entrada.equals("west")) {
+            x = 3;
+              }
+
+            while(face) {
+        if (world.getFacing() != x) {
+        world.turnRight();
+        }else {
+        face = false; world.moveForward(y, true);
+        }salida = "Command: JumpInDir"; }
+          break;
+        case NOP:
+          jj_consume_token(NOP);
+                 salida = "Command: JumpInDir";
           break;
         case MOV:
           jj_consume_token(MOV);
-          jj_consume_token(53);
-          x = num();
-          jj_consume_token(54);
-                                                world.moveForward(x,false);salida = "Command: Moveforward ";
+          x = varORnum();
+                                               world.moveForward(x,false);salida = "Command: Moveforward ";
           break;
         case HOP:
           jj_consume_token(HOP);
-          jj_consume_token(53);
-          x = num();
-          jj_consume_token(54);
-                                                world.moveForward(x,true);salida = "Command:Jumpforward ";
+          x = varORnum();
+                                               world.moveForward(x,true);salida = "Command:Jumpforward ";
           break;
         case GO:
           jj_consume_token(GO);
-          jj_consume_token(53);
-          x = num();
-          jj_consume_token(55);
+          x = varORnum();
+          jj_consume_token(52);
           y = num();
-          jj_consume_token(54);
-                                                          world.setPostion(x,y);salida = "Command:GO ";
+                                                         world.setPostion(x,y);salida = "Command:GO ";
           break;
         case PUT:
           jj_consume_token(PUT);
-          jj_consume_token(53);
           put();
-          jj_consume_token(54);
           break;
         case PICK:
           jj_consume_token(PICK);
-          jj_consume_token(53);
           get();
-          jj_consume_token(54);
           break;
         case POP:
           jj_consume_token(POP);
-          jj_consume_token(53);
-          x = num();
-          jj_consume_token(54);
-                                        world.popBalloons(x); salida = "Comando:  Pop";
+          x = varORnum();
+                                       world.popBalloons(x); salida = "Comando:  Pop";
           break;
         default:
-          jj_la1[0] = jj_gen;
+          jj_la1[5] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
-        jj_consume_token(56);
+        jj_consume_token(53);
                     try {
                                  Thread.sleep(900);
                     } catch (InterruptedException e) {
@@ -104,15 +348,26 @@ public class Robot implements RobotConstants {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case MOV:
         case RIGHT:
+        case LEFT:
+        case AROUND:
+        case FRONT:
         case POP:
         case GO:
         case HOP:
+        case AssignTo:
+        case TURN:
+        case FACE:
         case PUT:
         case PICK:
+        case MoveToThe:
+        case MoveInDir:
+        case JumpToThe:
+        case JumpInDir:
+        case NOP:
           ;
           break;
         default:
-          jj_la1[1] = jj_gen;
+          jj_la1[6] = jj_gen;
           break label_1;
         }
       }
@@ -122,7 +377,7 @@ public class Robot implements RobotConstants {
                  {if (true) return false;}
       break;
     default:
-      jj_la1[2] = jj_gen;
+      jj_la1[7] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -134,18 +389,18 @@ public class Robot implements RobotConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case CHIPS:
       jj_consume_token(CHIPS);
-      jj_consume_token(55);
-      f = num();
-                                          world.putChips(f); salida = "Command:  Put Chips";
+      jj_consume_token(52);
+      f = varORnum();
+                                               world.putChips(f); salida = "Command:  Put Chips";
       break;
     case BALLOONS:
       jj_consume_token(BALLOONS);
-      jj_consume_token(55);
-      f = num();
-                                                      world.putBalloons(f); salida = "Command:  Put Balloons";
+      jj_consume_token(52);
+      f = varORnum();
+                                                           world.putBalloons(f); salida = "Command:  Put Balloons";
       break;
     default:
-      jj_la1[3] = jj_gen;
+      jj_la1[8] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -156,18 +411,18 @@ public class Robot implements RobotConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case CHIPS:
       jj_consume_token(CHIPS);
-      jj_consume_token(55);
-      f = num();
-                                         world.pickChips(f);salida = "Command:  Pick chips";
+      jj_consume_token(52);
+      f = varORnum();
+                                              world.pickChips(f);salida = "Command:  Pick chips";
       break;
     case BALLOONS:
       jj_consume_token(BALLOONS);
-      jj_consume_token(55);
-      f = num();
-                                                      world.grabBalloons(f);salida="Command:  Pick balloons";
+      jj_consume_token(52);
+      f = varORnum();
+                                                           world.grabBalloons(f);salida="Command:  Pick balloons";
       break;
     default:
-      jj_la1[4] = jj_gen;
+      jj_la1[9] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -207,7 +462,7 @@ public class Robot implements RobotConstants {
                         {if (true) return total;}
       break;
     default:
-      jj_la1[5] = jj_gen;
+      jj_la1[10] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -234,7 +489,7 @@ public class Robot implements RobotConstants {
     jj_consume_token(ROBOT);
     variables();
     listaProcs();
-    jj_consume_token(57);
+    jj_consume_token(54);
     label_2:
     while (true) {
       instruct();
@@ -242,19 +497,30 @@ public class Robot implements RobotConstants {
       case 0:
       case MOV:
       case RIGHT:
+      case LEFT:
+      case AROUND:
+      case FRONT:
       case POP:
       case GO:
       case HOP:
+      case AssignTo:
+      case TURN:
+      case FACE:
       case PUT:
       case PICK:
+      case MoveToThe:
+      case MoveInDir:
+      case JumpToThe:
+      case JumpInDir:
+      case NOP:
         ;
         break;
       default:
-        jj_la1[6] = jj_gen;
+        jj_la1[11] = jj_gen;
         break label_2;
       }
     }
-    jj_consume_token(58);
+    jj_consume_token(55);
   }
 
   final public void variables() throws ParseException {
@@ -266,11 +532,11 @@ public class Robot implements RobotConstants {
                   variable= token.image;
                   variables.put(variable,null);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 55:
-        jj_consume_token(55);
+      case 52:
+        jj_consume_token(52);
         break;
       default:
-        jj_la1[7] = jj_gen;
+        jj_la1[12] = jj_gen;
         ;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -278,7 +544,7 @@ public class Robot implements RobotConstants {
         ;
         break;
       default:
-        jj_la1[8] = jj_gen;
+        jj_la1[13] = jj_gen;
         break label_3;
       }
     }
@@ -294,7 +560,7 @@ public class Robot implements RobotConstants {
         ;
         break;
       default:
-        jj_la1[9] = jj_gen;
+        jj_la1[14] = jj_gen;
         break label_4;
       }
     }
@@ -303,14 +569,14 @@ public class Robot implements RobotConstants {
   final public void procedure() throws ParseException {
     jj_consume_token(NAME);
 
-    jj_consume_token(57);
+    jj_consume_token(54);
     parametros();
     instrucciones();
-    jj_consume_token(58);
+    jj_consume_token(55);
   }
 
   final public void parametros() throws ParseException {
-    jj_consume_token(59);
+    jj_consume_token(56);
     label_5:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -318,21 +584,21 @@ public class Robot implements RobotConstants {
         ;
         break;
       default:
-        jj_la1[10] = jj_gen;
+        jj_la1[15] = jj_gen;
         break label_5;
       }
       jj_consume_token(NAME);
 
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 55:
-        jj_consume_token(55);
+      case 52:
+        jj_consume_token(52);
         break;
       default:
-        jj_la1[11] = jj_gen;
+        jj_la1[16] = jj_gen;
         ;
       }
     }
-    jj_consume_token(59);
+    jj_consume_token(56);
   }
 
   final public void instrucciones() throws ParseException {
@@ -340,33 +606,50 @@ public class Robot implements RobotConstants {
     while (true) {
       instruct();
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 55:
-        jj_consume_token(55);
+      case 52:
+        jj_consume_token(52);
         break;
       default:
-        jj_la1[12] = jj_gen;
+        jj_la1[17] = jj_gen;
         ;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case 0:
       case MOV:
       case RIGHT:
+      case LEFT:
+      case AROUND:
+      case FRONT:
       case POP:
       case GO:
       case HOP:
+      case AssignTo:
+      case TURN:
+      case FACE:
       case PUT:
       case PICK:
+      case MoveToThe:
+      case MoveInDir:
+      case JumpToThe:
+      case JumpInDir:
+      case NOP:
         ;
         break;
       default:
-        jj_la1[13] = jj_gen;
+        jj_la1[18] = jj_gen;
         break label_6;
       }
     }
   }
 
   final public void instruct() throws ParseException {
-    command();
+    command(null);
+  }
+
+  final public void bloque() throws ParseException {
+    jj_consume_token(54);
+    instrucciones();
+    jj_consume_token(55);
   }
 
   /** Generated Token Manager. */
@@ -378,7 +661,7 @@ public class Robot implements RobotConstants {
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[14];
+  final private int[] jj_la1 = new int[19];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -386,10 +669,10 @@ public class Robot implements RobotConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x1838060,0x1838060,0x1838061,0x0,0x0,0x0,0x1838061,0x0,0x0,0x0,0x0,0x0,0x0,0x1838061,};
+      jj_la1_0 = new int[] {0x1c0,0x7800,0x1c0,0x7800,0x7800,0x1ff783e0,0x1ff783e0,0x1ff783e1,0x0,0x0,0x0,0x1ff783e1,0x0,0x0,0x0,0x0,0x0,0x0,0x1ff783e1,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x3000,0x3000,0xa0000,0x0,0x800000,0x80000,0x80000,0x80000,0x800000,0x800000,0x0,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1800,0x1800,0x50000,0x0,0x100000,0x40000,0x40000,0x40000,0x100000,0x100000,0x0,};
    }
 
   /** Constructor with InputStream. */
@@ -403,7 +686,7 @@ public class Robot implements RobotConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 14; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 19; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -417,7 +700,7 @@ public class Robot implements RobotConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 14; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 19; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -427,7 +710,7 @@ public class Robot implements RobotConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 14; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 19; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -437,7 +720,7 @@ public class Robot implements RobotConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 14; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 19; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -446,7 +729,7 @@ public class Robot implements RobotConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 14; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 19; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -455,7 +738,7 @@ public class Robot implements RobotConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 14; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 19; i++) jj_la1[i] = -1;
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -506,12 +789,12 @@ public class Robot implements RobotConstants {
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[60];
+    boolean[] la1tokens = new boolean[57];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 14; i++) {
+    for (int i = 0; i < 19; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -523,7 +806,7 @@ public class Robot implements RobotConstants {
         }
       }
     }
-    for (int i = 0; i < 60; i++) {
+    for (int i = 0; i < 57; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

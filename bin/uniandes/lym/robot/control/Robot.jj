@@ -77,9 +77,8 @@ TOKEN: /* Nombres de Comandos */
 		| <POP: "Pop" >
 		| <GO: "GO" >
         | <HOP:  "HOP" >
-        | <AsignTo: "asignTo">
+        | <AssignTo: "assignTo">
 		| <GoTO: "goto">
-		| <MOVE: "move">
 		| <TURN: "turn">
 		| <FACE: "face">
 		| <PUT: "Put">
@@ -144,19 +143,158 @@ TOKEN :
 	{	
 		
 		int x,y;
-		salida=new String();	
+		String salida=new String();
+		String entrada= new String();
+		Boolean face = true;
+
 	}
 
 	
 	{
 		(		  (
-		   <RIGHT> "(" ")" {world.turnRight();salida = "Command: Turnright";}
-		| 	<MOV>  "(" x=num() ")" {world.moveForward(x,false);salida = "Command: Moveforward ";}  
-		| 	<HOP>  "(" x=num() ")" {world.moveForward(x,true);salida = "Command:Jumpforward ";}
-		| 	<GO>  "(" x=num() "," y=num()")" {world.setPostion(x,y);salida = "Command:GO ";}  
-		|  <PUT> "("  put() ")"					  			
-		|  <PICK> "(" get()  ")"	
-	    |  < POP > "(" x=num() ")" {world.popBalloons(x); salida = "Comando:  Pop";}
+		   <RIGHT>  {world.turnRight();salida = "Command: Turnright";}
+		|  <LEFT>  <RIGHT><RIGHT><RIGHT>{salida = "Command: Turnleft";}
+        |  <AROUND>  <RIGHT><RIGHT>{salida = "Command: Turnaround";}
+        |  <FRONT>  {salida = "Command: Front";}
+
+
+        |  <AssignTo>  x=varORnum() "," <NAME>{ entrada= token.image;
+		  variables.put(entrada,x);} {salida = "Command: AssignTo";}
+	    | <TURN>  (<RIGHT>
+		| <LEFT>
+		| <AROUND>)
+		{entrada= token.image; if (entrada.equals("left")) {
+	                                world.turnRight();
+	                                world.turnRight();
+	                                world.turnRight();
+	                                }else if ( entrada.equals("right" ))
+	                                {  world.turnRight(); }
+	                                else if (entrada.equals("around")) {
+	                                  world.turnRight();
+	                                  world.turnRight(); } salida = "Command: Turn";}
+	    | <FACE>  (<NORTH>
+        | <SOUTH>
+        | <EAST>
+        | <WEST>)  {entrada= token.image; x=-1;
+	    if (entrada.equals("north")) {
+	      x = 0;
+	      }else if (entrada.equals("south")){
+            x = 1;
+	      }else if (entrada.equals("east")) {
+            x = 2;
+	      }else if (entrada.equals("west")) {
+            x = 3;
+	      }
+	    
+	    while(face) {
+        if (world.getFacing() != x) {
+        world.turnRight();
+        }else {
+        face = false;
+        } }
+      }
+        |  <MoveToThe>  x=varORnum()"," (<RIGHT>
+		| <LEFT>
+		| <AROUND>)
+		{ entrada= token.image;
+        if (entrada.equals("left")) {
+	    world.turnRight();
+	    world.turnRight();
+	    world.turnRight();
+	    world.moveForward(x,false);
+	    world.turnRight();
+	    
+	    }else if ( entrada.equals("right" ))
+	    {  world.turnRight();
+	    world.moveForward(x,false);
+	    world.turnRight();
+	    world.turnRight();
+	    world.turnRight(); }
+	    else if (entrada.equals("around")) {
+	    world.turnRight();
+	    world.turnRight();
+	    world.moveForward(x,false);
+	    world.turnRight();
+	    world.turnRight();
+	     }
+	    salida = "Command: MoveToThe";}
+	    
+		|  <MoveInDir>  y=varORnum()","
+		(<NORTH>
+        | <SOUTH>
+        | <EAST>
+        | <WEST>)
+        {entrada= token.image; x=0;
+	    if (entrada.equals("north")) {
+	      x = 0;
+	      }else if (entrada.equals("south")){
+            x = 1;
+	      }else if (entrada.equals("east")) {
+            x = 2;
+	      }else{
+            x = 3;
+	      }
+	    
+	    while(face) {
+        if (world.getFacing() != x) {
+        world.turnRight();
+        }else {
+        face = false; world.moveForward(y, false);
+        }salida = "Command: JumpInDir"; }   }
+        
+        |  <JumpToThe> x=varORnum()"," <NAME>{ entrada= token.image;
+        if (entrada.equals("left")) {
+	    world.turnRight();
+	    world.turnRight();
+	    world.turnRight();
+	    world.moveForward(x,true);
+	    world.turnRight();
+	    
+	    }else if ( entrada.equals("right" ))
+	    {  world.turnRight();
+	    world.moveForward(x,true);
+	    world.turnRight();
+	    world.turnRight();
+	    world.turnRight(); }
+	    else if (entrada.equals("around")) {
+	    world.turnRight();
+	    world.turnRight();
+	    world.moveForward(x,true);
+	    world.turnRight();
+	    world.turnRight();
+	     }
+	    salida = "Command: JumpToThe";}
+
+	    |  <JumpInDir>  y=varORnum()"," (<NORTH>
+        | <SOUTH>
+        | <EAST>
+        | <WEST>)
+        {entrada= token.image; x=-1;
+	    if (entrada.equals("north")) {
+	      x = 0;
+	      }else if (entrada.equals("south")){
+            x = 1;
+	      }else if (entrada.equals("east")) {
+            x = 2;
+	      }else if (entrada.equals("west")) {
+            x = 3;
+	      }
+	    
+	    while(face) {
+        if (world.getFacing() != x) {
+        world.turnRight();
+        }else {
+        face = false; world.moveForward(y, true);
+        }salida = "Command: JumpInDir"; } }
+
+        | <NOP> {salida = "Command: JumpInDir"; }
+	    
+		| 	<MOV>   x=varORnum()  {world.moveForward(x,false);salida = "Command: Moveforward ";}  
+		| 	<HOP>   x=varORnum()  {world.moveForward(x,true);salida = "Command:Jumpforward ";}
+		| 	<GO>   x=varORnum() "," y=num() {world.setPostion(x,y);salida = "Command:GO ";}  
+		|  <PUT>  put() 			  			
+		|  <PICK>  get()  	
+	    |  < POP >  x=varORnum()  {world.popBalloons(x); salida = "Comando:  Pop";}
 		) ";" 
 
 		{
@@ -173,13 +311,14 @@ TOKEN :
     	| <EOF> {return false;} 
 	}
 
+
 	void put() :
 	{
 		int f=1;	
 	}
 	{
-		( <CHIPS>    "," f=num() {world.putChips(f); salida = "Command:  Put Chips"; })
-		|  	  ( <BALLOONS>   "," f=num() {world.putBalloons(f); salida = "Command:  Put Balloons";})	 
+		( <CHIPS>    "," f=varORnum() {world.putChips(f); salida = "Command:  Put Chips"; })
+		|  	  ( <BALLOONS>   "," f=varORnum() {world.putBalloons(f); salida = "Command:  Put Balloons";})	 
 
 	}
 
@@ -188,8 +327,8 @@ TOKEN :
 		int f=1;	
 	}
 	{
-		( <CHIPS>   "," f=num() {world.pickChips(f);salida = "Command:  Pick chips";})
-		|  	  ( <BALLOONS>   "," f=num() {world.grabBalloons(f);salida="Command:  Pick balloons";})	 
+		( <CHIPS>   "," f=varORnum() {world.pickChips(f);salida = "Command:  Pick chips";})
+		|  	  ( <BALLOONS>   "," f=varORnum() {world.grabBalloons(f);salida="Command:  Pick balloons";})	 
 
 	}
 
@@ -322,5 +461,13 @@ void instruct():
 // command | control  | procedureDefined
 }
 {
- command()
+ command(null)
+}
+
+void bloque():
+{
+
+}
+{
+ "[" instrucciones() "]"
 }
